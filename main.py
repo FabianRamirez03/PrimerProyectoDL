@@ -1,8 +1,11 @@
+import tkinter
 from tkinter import *
 from tkinter import messagebox, ttk
 from tkinter.ttk import Combobox, Treeview
 from tkinter import messagebox
-
+import matplotlib.pyplot as plt
+import tk as tk
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 import convertions
 
@@ -33,7 +36,7 @@ ParityTable = [['Palabra de datos recibida', '1', '0', '0', '0', '1', '1', '0', 
 root.geometry('%dx%d+%d+%d' % (1400, 700, 20, 20))
 root.resizable(height=False, width=False)
 
-# Frame donde se digita el codig
+# Frame donde se digita el codigo
 tables_Frame = Frame(root, width=500, bg="white", bd=2)
 tables_Frame.pack(fill=Y, side="right")
 
@@ -56,6 +59,10 @@ number_frame.pack(side='top', padx=0, pady=0, anchor='w')
 equivalencias_Frame = Frame(left_Frame, width=935, height=500, bg="white", bd=2)
 equivalencias_Frame.pack()
 
+# Frame que contiene la señal NZRI
+NZRI_Frame = Frame(left_Frame, width=935, height=500, bg="white", bd=2)
+NZRI_Frame.pack()
+
 
 # Frame que inferior izquierdo
 left_Botom_Frame = Frame(left_Frame, width=935, height=550, bg="white", bd=2)
@@ -75,10 +82,28 @@ def validate():
 
         for i, (valorOctal, valorDecimal, valorHexa) in enumerate(tempList, start=1):
             convertionsBox.insert("", "end", values=(valorOctal, valorDecimal, valorHexa))
+            displayNZRI(numberEntry.get())
+
+
+
     else:
         messagebox.showinfo(message="El número ingresado debe ser binario", title="Error")
 
 
+def displayNZRI(number):
+    for widget in NZRI_Frame.winfo_children():
+        widget.destroy()
+    Values = convertions.convertNZRI(number)
+    figure = plt.Figure(figsize=(5, 4), dpi=100)
+    ax = figure.add_subplot(111)
+
+    plt.setp(ax, xticks=Values[0], xticklabels=Values[2],
+             yticks=[0, 1])
+    ax.step(Values[0], Values[1], where='post')
+    plot = FigureCanvasTkAgg(figure, NZRI_Frame)
+    plot.draw()
+    plot.get_tk_widget().pack(side=tkinter.TOP, fill=tkinter.BOTH, expand=1)
+    ax.set_title('Código NZRI generado.')
 # _________________________Elementos de la interfaz__________________________________
 
 
@@ -101,6 +126,10 @@ comboExample.current(0)
 analizarBT = PhotoImage(file="Images/button_analizar.png")
 analizarButton = Button(number_frame, bg='white', image=analizarBT, bd=0, command=validate)
 analizarButton.place(x=400, y=50)
+
+# NZRI display
+
+
 
 # Table for convertions
 label = Label(equivalencias_Frame, text="Equivalencias", font=("Arial", 15)).grid(row=0, columnspan=2)
