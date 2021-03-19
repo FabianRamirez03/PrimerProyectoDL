@@ -1,6 +1,13 @@
+import tkinter
 from tkinter import *
 from tkinter import messagebox, ttk
 from tkinter.ttk import Combobox, Treeview
+from tkinter import messagebox
+import matplotlib.pyplot as plt
+import tk as tk
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+
+import convertions
 
 root = Tk()
 
@@ -26,10 +33,10 @@ ParityTable = [['Palabra de datos recibida', '1', '0', '0', '0', '1', '1', '0', 
                ['P4', '1', '0', '0', '0', '1', '1', '0', '0', '1', '0', '0', 'Error', '1']]
 
 # root.geometry("1400x650")
-root.geometry('%dx%d+%d+%d' % (1000, 500, 20, 20))
+root.geometry('%dx%d+%d+%d' % (1400, 700, 20, 20))
 root.resizable(height=False, width=False)
 
-# Frame donde se digita el codig
+# Frame donde se digita el codigo
 tables_Frame = Frame(root, width=500, bg="white", bd=2)
 tables_Frame.pack(fill=Y, side="right")
 
@@ -44,49 +51,97 @@ left_Frame = Frame(root, width=935, bg="white", borderwidth=2)
 left_Frame.pack(fill="both", side="left")
 
 # Frame que contiene el canvas donde la tortuga dibuja
-number_frame = Frame(left_Frame, width=935, height=200, bg="white", bd=2)
+number_frame = Frame(left_Frame, width=935, height=160, bg="white", bd=2)
 number_frame.pack()
+number_frame.pack(side='top', padx=0, pady=0, anchor='w')
 
-# Frame que contiene la consola
-equivalencias_Frame = Frame(left_Frame, width=750, height=150, bg="white", bd=2)
+# Frame que contiene las equivalencias
+equivalencias_Frame = Frame(left_Frame, width=935, height=500, bg="white", bd=2)
 equivalencias_Frame.pack()
+
+# Frame que contiene la señal NZRI
+NZRI_Frame = Frame(left_Frame, width=935, height=500, bg="white", bd=2)
+NZRI_Frame.pack()
+
 
 # Frame que inferior izquierdo
 left_Botom_Frame = Frame(left_Frame, width=935, height=550, bg="white", bd=2)
 left_Botom_Frame.pack()
+# _____________________________________Validaciones__________________________________
 
+
+def validate():
+    if convertions.validateBinary(numberEntry.get()):
+        global valorOctal
+        valorOctal = convertions.convertOctal(numberEntry.get())
+        valorDecimal = convertions.convertDecimal(numberEntry.get())
+        valorHexa = convertions.convertHexadecimal(numberEntry.get())
+
+        tempList = [[valorOctal, valorDecimal, valorHexa]]
+        tempList.sort(key=lambda e: e[1], reverse=False)
+
+        for i, (valorOctal, valorDecimal, valorHexa) in enumerate(tempList, start=1):
+            convertionsBox.insert("", "end", values=(valorOctal, valorDecimal, valorHexa))
+            displayNZRI(numberEntry.get())
+
+
+
+    else:
+        messagebox.showinfo(message="El número ingresado debe ser binario", title="Error")
+
+
+def displayNZRI(number):
+    for widget in NZRI_Frame.winfo_children():
+        widget.destroy()
+    Values = convertions.convertNZRI(number)
+    figure = plt.Figure(figsize=(5, 4), dpi=100)
+    ax = figure.add_subplot(111)
+
+    plt.setp(ax, xticks=Values[0], xticklabels=Values[2],
+             yticks=[0, 1])
+    ax.step(Values[0], Values[1], where='post')
+    plot = FigureCanvasTkAgg(figure, NZRI_Frame)
+    plot.draw()
+    plot.get_tk_widget().pack(side=tkinter.TOP, fill=tkinter.BOTH, expand=1)
+    ax.set_title('Código NZRI generado.')
 # _________________________Elementos de la interfaz__________________________________
 
 
 numberLabel = Label(number_frame, text="Número a analizar", fg="Black", bg="White", font=(font, 15))
-numberLabel.place(x=10, y=10)
+numberLabel.place(x=140, y=10)
+
 
 numberEntry = Entry(number_frame, font=(font, 15), borderwidth=3, relief="sunken")
-numberEntry.place(x=10, y=50)
+numberEntry.place(x=140, y=50)
 
-parityLabel = Label(number_frame, text="Paridad:", fg="Black", bg="White", font=(font, 14))
-parityLabel.place(x=10, y=90)
+parityLabel = Label(number_frame, text="Paridad:", fg="Black", bg="White", font=(font, 15))
+parityLabel.place(x=130, y=90)
 
 comboExample = Combobox(number_frame, font=(font, 14), width=10, values=["Par", "Impar"], state='readonly')
-comboExample.place(x=90, y=90)
+comboExample.place(x=220, y=90)
 root.option_add('*TCombobox*Listbox.font', (font, 14))
 comboExample.current(0)
 
+
 analizarBT = PhotoImage(file="Images/button_analizar.png")
-analizarButton = Button(number_frame, bg='white', image=analizarBT, bd=0)
-analizarButton.place(x=83, y=130)
+analizarButton = Button(number_frame, bg='white', image=analizarBT, bd=0, command=validate)
+analizarButton.place(x=400, y=50)
 
-EquivalenciasLabel = Label(equivalencias_Frame, text="Equivalencias", fg="Black", bg="White", font=(font, 15))
-EquivalenciasLabel.place(x=10, y=10)
+# NZRI display
 
-OctalLabel = Label(equivalencias_Frame, text="Octal:  " + valorOctal, fg="Black", bg="White", font=(font, 14))
-OctalLabel.place(x=10, y=48)
 
-DecimalLabel = Label(equivalencias_Frame, text="Decimal:  " + valorDecimal, fg="Black", bg="White", font=(font, 14))
-DecimalLabel.place(x=10, y=83)
 
-HexaLabel = Label(equivalencias_Frame, text="Hexadecimal:  " + valorHexa, fg="Black", bg="White", font=(font, 14))
-HexaLabel.place(x=10, y=118)
+# Table for convertions
+label = Label(equivalencias_Frame, text="Equivalencias", font=("Arial", 15)).grid(row=0, columnspan=2)
+# create Treeview with 3 columns
+cols = ('Octal', 'Decimal', 'Hexadecimal')
+convertionsBox = ttk.Treeview(equivalencias_Frame, columns=cols, show='headings')
+# set column headings
+for col in cols:
+    convertionsBox.heading(col, text=col)
+    convertionsBox.column(col, minwidth=0, width=220, stretch=NO, anchor="center")
+convertionsBox.grid(row=1, column=0, columnspan=2)
+
 
 HammingLabel = Label(Hamming_Frame, text="Cálculo de los bits de paridad en el código Hamming", fg="Black",
                      bg="White", font=(font, 14))
@@ -161,5 +216,6 @@ def on_closing():
 
 
 root.protocol("WM_DELETE_WINDOW", on_closing)
+
 
 root.mainloop()
