@@ -19,24 +19,24 @@ valorOctal = ""
 valorDecimal = ""
 valorHexa = ""
 
-HammingTable = [['Palabras de datos (sin paridad)', '', '', '0', '', '1', '1', '0', '', '1', '0', '1'],
-                ['P1', '', '', '0', '', '1', '1', '0', '', '1', '0', '1'],
-                ['P2', '', '', '0', '', '1', '1', '0', '', '1', '0', '1'],
-                ['P3', '', '', '0', '', '1', '1', '0', '', '1', '0', '1'],
-                ['P4', '', '', '0', '', '1', '1', '0', '', '1', '0', '1'],
-                ['Palabras de datos (con paridad)', '', '', '0', '', '1', '1', '0', '', '1', '0', '1']]
+HammingTable = [['Palabras de datos (sin paridad)', '', '', '0', '', 1, '1', '0', '', '1', '0', '1', '1', '1', '1', '1', '1'],
+                ['P1', '', '', '0', '', '1', '1', '0', '', '1', '0', '1', '1', '1', '1', '1', '1'],
+                ['P2', '', '', '0', '', '1', '1', '0', '', '1', '0', '1', '1', '1', '1', '1', '1'],
+                ['P3', '', '', '0', '', '1', '1', '0', '', '1', '0', '1', '1', '1', '1', '1', '1'],
+                ['P4', '', '', '0', '', '1', '1', '0', '', '1', '0', '1', '1', '1', '1', '1', '1'],
+                ['Palabras de datos (con paridad)', '', '', '0', '', '1', '1', '0', '', '1', '0', '1', '1', '1', '1', '1', '1']]
 
-ParityTable = [['Palabra de datos recibida', '1', '0', '0', '0', '1', '1', '0', '0', '1', '0', '0', '1', ''],
-               ['P1', '1', '0', '0', '0', '1', '1', '0', '0', '1', '0', '0', 'Error', '1'],
-               ['P2', '1', '0', '0', '0', '1', '1', '0', '0', '1', '0', '0', 'Error', '1'],
-               ['P3', '1', '0', '0', '0', '1', '1', '0', '0', '1', '0', '0', 'Correcto', '1'],
-               ['P4', '1', '0', '0', '0', '1', '1', '0', '0', '1', '0', '0', 'Error', '1']]
+ParityTable = [['Palabra de datos recibida', '1', '0', '0', '0', '1', '1', '0', '0', '1', '0', '0', '1','0', '0', '1', '0', '0', ''],
+               ['P1', '1', '0', '0', '0', '1', '1', '0', '0', '1', '0', '0','0', '0', '1', '0', '0', 'Error', '1'],
+               ['P2', '1', '0', '0', '0', '1', '1', '0', '0', '1', '0', '0','0', '0', '1', '0', '0', 'Error', '1'],
+               ['P3', '1', '0', '0', '0', '1', '1', '0', '0', '1', '0', '0','0', '0', '1', '0', '0', 'Correcto', '1'],
+               ['P4', '1', '0', '0', '0', '1', '1', '0', '0', '1', '0', '0','0', '0', '1', '0', '0', 'Error', '1']]
 
 # root.geometry("1400x650")
 root.geometry('%dx%d+%d+%d' % (1400, 700, 20, 20))
 root.resizable(height=False, width=False)
 
-# Frame donde se digita el codigo
+# Frame donde estan las tablas
 tables_Frame = Frame(root, width=500, bg="white", bd=2)
 tables_Frame.pack(fill=Y, side="right")
 
@@ -46,27 +46,24 @@ Hamming_Frame.pack()
 Parity_Frame = Frame(tables_Frame, height=200, width=700, bg="white", bd=2)
 Parity_Frame.pack()
 
-# Frame que contiene el resto de la interfaz fuera del recuadro del codigo
-left_Frame = Frame(root, width=935, bg="white", borderwidth=2)
+# Frame que el contenido del lado izquierdo
+left_Frame = Frame(root, width=400, bg="red", borderwidth=2)
 left_Frame.pack(fill="both", side="left")
 
 # Frame que contiene el canvas donde la tortuga dibuja
-number_frame = Frame(left_Frame, width=935, height=160, bg="white", bd=2)
+number_frame = Frame(left_Frame, width=400, height=160, bg="white", bd=2)
 number_frame.pack()
 number_frame.pack(side='top', padx=0, pady=0, anchor='w')
 
 # Frame que contiene las equivalencias
-equivalencias_Frame = Frame(left_Frame, width=935, height=500, bg="white", bd=2)
+equivalencias_Frame = Frame(left_Frame, width=400, height=500, bg="green", bd=2)
 equivalencias_Frame.pack()
 
 # Frame que contiene la señal NZRI
-NZRI_Frame = Frame(left_Frame, width=935, height=500, bg="white", bd=2)
+NZRI_Frame = Frame(left_Frame, width=400, height=500, bg="white", bd=2)
 NZRI_Frame.pack()
 
 
-# Frame que inferior izquierdo
-left_Botom_Frame = Frame(left_Frame, width=935, height=550, bg="white", bd=2)
-left_Botom_Frame.pack()
 # _____________________________________Validaciones__________________________________
 
 
@@ -108,24 +105,24 @@ def displayNZRI(number):
 
 
 numberLabel = Label(number_frame, text="Número a analizar", fg="Black", bg="White", font=(font, 15))
-numberLabel.place(x=140, y=10)
+numberLabel.place(x=20, y=10)
 
 
 numberEntry = Entry(number_frame, font=(font, 15), borderwidth=3, relief="sunken")
-numberEntry.place(x=140, y=50)
+numberEntry.place(x=20, y=50)
 
 parityLabel = Label(number_frame, text="Paridad:", fg="Black", bg="White", font=(font, 15))
-parityLabel.place(x=130, y=90)
+parityLabel.place(x=20, y=90)
 
 comboExample = Combobox(number_frame, font=(font, 14), width=10, values=["Par", "Impar"], state='readonly')
-comboExample.place(x=220, y=90)
+comboExample.place(x=100, y=90)
 root.option_add('*TCombobox*Listbox.font', (font, 14))
 comboExample.current(0)
 
 
 analizarBT = PhotoImage(file="Images/button_analizar.png")
 analizarButton = Button(number_frame, bg='white', image=analizarBT, bd=0, command=validate)
-analizarButton.place(x=400, y=50)
+analizarButton.place(x=240, y=50)
 
 # NZRI display
 
@@ -139,7 +136,7 @@ convertionsBox = ttk.Treeview(equivalencias_Frame, columns=cols, show='headings'
 # set column headings
 for col in cols:
     convertionsBox.heading(col, text=col)
-    convertionsBox.column(col, minwidth=0, width=220, stretch=NO, anchor="center")
+    convertionsBox.column(col, minwidth=0, width=140, stretch=NO, anchor="center")
 convertionsBox.grid(row=1, column=0, columnspan=2)
 
 
@@ -147,7 +144,7 @@ HammingLabel = Label(Hamming_Frame, text="Cálculo de los bits de paridad en el 
                      bg="White", font=(font, 14))
 HammingLabel.grid(row=0, column=0, columnspan=2)
 
-ComprobacionLabel = Label(Parity_Frame, text="Cálculo de los bits de paridad en el código Hamming", fg="Black",
+ComprobacionLabel = Label(Parity_Frame, text="Comprobación de los bits de paridad en el código Hamming", fg="Black",
                           bg="White", font=(font, 14))
 ComprobacionLabel.grid(row=0, column=0, columnspan=2)
 
@@ -162,11 +159,11 @@ def showHamming():
 
     for row in tempList:
         listBox.insert("", "end", values=(
-            row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10], row[11]))
+            row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10], row[11], row[12], row[13], row[14], row[15], row[16]))
 
 
 # create Treeview with 3 columns
-colsHamming = ('', 'p1', 'p2', 'd1', 'p3', 'd2', 'd3', 'd4', 'p4', 'd5', 'd6', 'd7')
+colsHamming = ('', 'p1', 'p2', 'd1', 'p3', 'd2', 'd3', 'd4', 'p4', 'd5', 'd6', 'd7', 'd8', 'd9', 'd10', 'd11', 'd12')
 listBox = Treeview(Hamming_Frame, columns=colsHamming, show='headings')
 # set column headings
 for col in colsHamming:
@@ -176,7 +173,7 @@ for col in colsHamming:
     else:
         listBox.heading(col, text=col)
         listBox.column(col, minwidth=0, width=40, stretch=NO, anchor="center")
-listBox.grid(row=2, column=0, columnspan=2)
+listBox.grid(row=0, column=0, columnspan=2)
 showHamming()
 
 
@@ -188,11 +185,11 @@ def showParity():
 
     for row in tempList:
         listBox.insert("", "end", values=(
-            row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10], row[11], row[12], row[13]))
+            row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10], row[11], row[12], row[13], row[14], row[15], row[16], row[17], row[18]))
 
 
 # create Treeview with 3 columns
-colsParity = ('', 'p1', 'p2', 'd1', 'p3', 'd2', 'd3', 'd4', 'p4', 'd5', 'd6', 'd7', "Prueba de paridad", "Bit de Paridad")
+colsParity = ('', 'p1', 'p2', 'd1', 'p3', 'd2', 'd3', 'd4', 'p4', 'd5', 'd6', 'd7', 'd8', 'd9', 'd10', 'd11', 'd12', "Prueba de paridad", "Bit de Paridad")
 listBox = Treeview(Parity_Frame, columns=colsParity, show='headings')
 # set column headings
 for col in colsParity:
