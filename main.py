@@ -19,12 +19,15 @@ valorOctal = ""
 valorDecimal = ""
 valorHexa = ""
 
-HammingTable = [['Palabras de datos (sin paridad)', '', '', '0', '', 1, '1', '0', '', '1', '0', '1', '1', '1', '1', '1', '1'],
-                ['P1', '', '', '0', '', '1', '1', '0', '', '1', '0', '1', '1', '1', '1', '1', '1'],
-                ['P2', '', '', '0', '', '1', '1', '0', '', '1', '0', '1', '1', '1', '1', '1', '1'],
-                ['P3', '', '', '0', '', '1', '1', '0', '', '1', '0', '1', '1', '1', '1', '1', '1'],
-                ['P4', '', '', '0', '', '1', '1', '0', '', '1', '0', '1', '1', '1', '1', '1', '1'],
-                ['Palabras de datos (con paridad)', '', '', '0', '', '1', '1', '0', '', '1', '0', '1', '1', '1', '1', '1', '1']]
+HammingTable = [
+    ['Palabras de datos (sin paridad)', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',''],
+    ['P1', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+    ['P2', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+    ['P3', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+    ['P4', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+    ['P5', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+    ['Palabras de datos (con paridad)', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '']
+]
 
 ParityTable = [['Palabra de datos recibida', '1', '0', '0', '0', '1', '1', '0', '0', '1', '0', '0', '1','0', '0', '1', '0', '0', ''],
                ['P1', '1', '0', '0', '0', '1', '1', '0', '0', '1', '0', '0','0', '0', '1', '0', '0', 'Error', '1'],
@@ -69,7 +72,7 @@ NZRI_Frame.pack()
 
 def validate():
     if convertions.validateBinary(numberEntry.get()):
-        global valorOctal
+        global valorOctal, valorDecimal, valorHexa, HammingTable
         valorOctal = convertions.convertOctal(numberEntry.get())
         valorDecimal = convertions.convertDecimal(numberEntry.get())
         valorHexa = convertions.convertHexadecimal(numberEntry.get())
@@ -80,7 +83,8 @@ def validate():
         for i, (valorOctal, valorDecimal, valorHexa) in enumerate(tempList, start=1):
             convertionsBox.insert("", "end", values=(valorOctal, valorDecimal, valorHexa))
             displayNZRI(numberEntry.get())
-
+        HammingTable = convertions.Hamming(numberEntry.get())
+        showHamming()
 
 
     else:
@@ -114,10 +118,10 @@ numberEntry.place(x=20, y=50)
 parityLabel = Label(number_frame, text="Paridad:", fg="Black", bg="White", font=(font, 15))
 parityLabel.place(x=20, y=90)
 
-comboExample = Combobox(number_frame, font=(font, 14), width=10, values=["Par", "Impar"], state='readonly')
-comboExample.place(x=100, y=90)
+parityCombobox = Combobox(number_frame, font=(font, 14), width=10, values=["Par", "Impar"], state='readonly')
+parityCombobox.place(x=100, y=90)
 root.option_add('*TCombobox*Listbox.font', (font, 14))
-comboExample.current(0)
+parityCombobox.current(0)
 
 
 analizarBT = PhotoImage(file="Images/button_analizar.png")
@@ -154,16 +158,18 @@ style.configure("Treeview", font=(font, 11))
 
 
 def showHamming():
-    global HammingTable
+    global HammingTable, listBox
     tempList = HammingTable
+    for i in listBox.get_children():
+        listBox.delete(i)
 
     for row in tempList:
         listBox.insert("", "end", values=(
-            row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10], row[11], row[12], row[13], row[14], row[15], row[16]))
+            row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10], row[11], row[12], row[13], row[14], row[15], row[16], row[17]))
 
 
 # create Treeview with 3 columns
-colsHamming = ('', 'p1', 'p2', 'd1', 'p3', 'd2', 'd3', 'd4', 'p4', 'd5', 'd6', 'd7', 'd8', 'd9', 'd10', 'd11', 'd12')
+colsHamming = ('', 'p1', 'p2', 'd1', 'p3', 'd2', 'd3', 'd4', 'p4', 'd5', 'd6', 'd7', 'd8', 'd9', 'd10', 'd11', 'p5', 'd12')
 listBox = Treeview(Hamming_Frame, columns=colsHamming, show='headings')
 # set column headings
 for col in colsHamming:
@@ -180,29 +186,29 @@ showHamming()
 # Comprobación de los bits de paridad
 
 def showParity():
-    global ParityTable
+    global ParityTable, listBoxParity
     tempList = ParityTable
 
     for row in tempList:
-        listBox.insert("", "end", values=(
+        listBoxParity.insert("", "end", values=(
             row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10], row[11], row[12], row[13], row[14], row[15], row[16], row[17], row[18]))
 
 
 # create Treeview with 3 columns
 colsParity = ('', 'p1', 'p2', 'd1', 'p3', 'd2', 'd3', 'd4', 'p4', 'd5', 'd6', 'd7', 'd8', 'd9', 'd10', 'd11', 'd12', "Prueba de paridad", "Bit de Paridad")
-listBox = Treeview(Parity_Frame, columns=colsParity, show='headings')
+listBoxParity = Treeview(Parity_Frame, columns=colsParity, show='headings')
 # set column headings
 for col in colsParity:
     if col == colsParity[0]:
-        listBox.heading(col, text=col)
-        listBox.column(col, minwidth=0, width=170, stretch=NO, anchor="center")
+        listBoxParity.heading(col, text=col)
+        listBoxParity.column(col, minwidth=0, width=170, stretch=NO, anchor="center")
     elif col == colsParity[len(colsParity)-1] or col == colsParity[len(colsParity)-2]:
-        listBox.heading(col, text=col)
-        listBox.column(col, minwidth=0, width=110, stretch=NO, anchor="center")
+        listBoxParity.heading(col, text=col)
+        listBoxParity.column(col, minwidth=0, width=110, stretch=NO, anchor="center")
     else:
-        listBox.heading(col, text=col)
-        listBox.column(col, minwidth=0, width=30, stretch=NO, anchor="center")
-listBox.grid(row=2, column=0, columnspan=2)
+        listBoxParity.heading(col, text=col)
+        listBoxParity.column(col, minwidth=0, width=30, stretch=NO, anchor="center")
+listBoxParity.grid(row=2, column=0, columnspan=2)
 showParity()
 
 
