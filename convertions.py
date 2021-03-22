@@ -80,6 +80,7 @@ def setRow(binary, rowNumber, row, parity, wholeResult):
                 column = column + 1
                 continue
             else:
+                print(row, ' ', column, ' ', binary, ' ', binaryPos)
                 row[column] = binary[binaryPos]
                 column = column + 1
                 binaryPos = binaryPos + 1
@@ -273,8 +274,8 @@ def detectError(noisedNumber, parity):
     return [posicionError[0], finalTable]
 
 
-# result = detectError('01101011101010101')
-
+# result = detectError('01101011101010101', '0')
+# print(result[1])
 
 
 

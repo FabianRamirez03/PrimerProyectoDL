@@ -220,9 +220,8 @@ def showParity():
 
     ParityTable = convertions.detectError(HammingNumberWithNoise, getParity())[1]
     tempList = ParityTable
-
     for i in listBoxParity.get_children():
-        listBox.delete(i)
+        listBoxParity.delete(i)
 
     for row in tempList:
         listBoxParity.insert("", "end", values=(
