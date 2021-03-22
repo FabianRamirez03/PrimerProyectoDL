@@ -203,6 +203,7 @@ def buildFinalTable(tableToBuild, extraData, parity):
     return tableToBuild
 
 
+
 def detectError(noisedNumber, parity):
     # Recibimos un numero sucio pero con la paridad como si fuera limpio
 
@@ -232,6 +233,10 @@ def detectError(noisedNumber, parity):
 
 result = detectError('01101011101010101', '0')
 print(result[1])
+
+
+
+
 
 #pprint(Hamming(cleaning[0], '0'))
 
