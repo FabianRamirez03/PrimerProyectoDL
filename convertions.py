@@ -187,10 +187,10 @@ def buildFinalTable(tableToBuild, extraData):
     tableToBuild[0].append('1')
     cont = 0
     while cont<len(extraData):
-        if (extraData[cont] == 0):
-            tableToBuild[cont +1].append('Correcto')
-        else:
+        if (extraData[cont] == '0'):
             tableToBuild[cont +1].append('Error')
+        else:
+            tableToBuild[cont +1].append('Correcto')
         tableToBuild[cont +1].append(extraData[cont])
         cont+=1
 
