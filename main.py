@@ -94,7 +94,6 @@ def validate():
             convertionsBox.insert("", "end", values=(valorOctal, valorDecimal, valorHexa))
             displayNZRI(numberEntry.get())
         HammingTable = convertions.Hamming(numberEntry.get(), getParity())
-
         showParity()
         showHamming()
     else:
@@ -200,7 +199,7 @@ def showHamming():
             row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10], row[11], row[12],
             row[13], row[14], row[15], row[16], row[17]))
 
-    HammingTable = []
+    HammingTable = ''
 
 # create Treeview with 3 columns
 colsHamming = (
@@ -215,7 +214,6 @@ for col in colsHamming:
         listBox.heading(col, text=col)
         listBox.column(col, minwidth=0, width=40, stretch=NO, anchor="center")
 listBox.grid(row=0, column=0, columnspan=2)
-showHamming()
 
 
 
@@ -229,9 +227,15 @@ def showParity():
     global ParityTable, listBoxParity
 
     HammingNumberWithNoise = convertions.HammingWithNoise(HammingTable, noiseCombobox.get())
+<<<<<<< HEAD
     print('crgsa',HammingNumberWithNoise)
     ParityTable = convertions.detectError(HammingNumberWithNoise, getParity())[1]
 
+=======
+
+    error = convertions.detectError(HammingNumberWithNoise, getParity())
+    ParityTable = error[1]
+>>>>>>> faaea4ea6d9a45d83a4482d3fd9132e97eeb26b7
     tempList = ParityTable
     for i in listBoxParity.get_children():
         listBoxParity.delete(i)
@@ -241,9 +245,9 @@ def showParity():
             row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10], row[11], row[12],
             row[13], row[14], row[15], row[16], row[17], row[18], row[19]))
 
-    errorPosition = convertions.detectError(HammingNumberWithNoise, getParity())[0]
+    errorPosition = error[0]
     errorPositionLabelValue['text'] = errorPosition
-    ParityTable = []
+    ParityTable = ''
 
 # create Treeview with 3 columns
 colsParity = ('', 'p1', 'p2', 'd1', 'p3', 'd2', 'd3', 'd4', 'p4', 'd5', 'd6', 'd7', 'd8', 'd9', 'd10', 'd11', 'p5', 'd12',
@@ -267,7 +271,11 @@ listBoxParity.grid(row=2, column=0, columnspan=2)
 def getParity():
     result = '0'
     if parityCombobox.get() == "Par":
+<<<<<<< HEAD
         result = '1'
+=======
+        result ='1'
+>>>>>>> faaea4ea6d9a45d83a4482d3fd9132e97eeb26b7
     return result
 
 

@@ -158,46 +158,33 @@ def HammingWithNoise(hammingTable, noiseCombobox):
 
     print(noiseCombobox)
     if noiseCombobox == '1':
-        list[2] = int(not int(list[2]))
-        print("caca" + str(list))
+        list[2] = int(not list[2])
     if noiseCombobox == '2':
-        list[4] = int(not int(list[4]))
-        print("caca" + str(list))
+        list[4] = int(not list[4])
     if noiseCombobox == '3':
-        list[5] = int(not int(list[5]))
-        print("caca" + str(list))
+        list[5] = int(not list[5])
     if noiseCombobox == '4':
-        list[6] = int(not int(list[6]))
-        print("caca" + str(list))
+        list[6] = int(not list[6])
     if noiseCombobox == '5':
-        list[8] = int(not int(list[8]))
-        print("caca" + str(list))
+        list[8] = int(not list[8])
     if noiseCombobox == '6':
-        list[9] = int(not int(list[9]))
-        print("caca" + str(list))
+        list[9] = int(not list[9])
     if noiseCombobox == '7':
-        list[10] = int(not int(list[10]))
-        print("caca" + str(list))
+        list[10] = int(not list[10])
     if noiseCombobox == '8':
-        list[11] = int(not int(list[11]))
-        print("caca" + str(list))
+        list[11] = int(not list[11])
     if noiseCombobox == '9':
-        list[12] = int(not int(list[12]))
-        print("caca" + str(list))
+        list[12] = int(not list[12])
     if noiseCombobox == '10':
-        list[13] = int(not int(list[13]))
-        print("caca" + str(list))
+        list[13] = int(not list[13])
     if noiseCombobox == '11':
-        list[14] = int(not int(list[14]))
-        print("caca" + str(list))
+        list[14] = int(not list[14])
     if noiseCombobox == '12':
-        list[16] = int(not int(list[16]))
-        print("caca" + str(list))
+        list[16] = int(not list[16])
     strings = [str(integer) for integer in list]
     a_string = "".join(strings)
     result = int(a_string)
 
-    print(result)
 
     return str(result)
 
@@ -216,6 +203,7 @@ def cleanNumber(binary):
         cont+=1
     return [new, parityBits]
 
+
 ### Retorna la posicion donde se encuentra el error
 def compararParidades(paridadVieja, paridadRuidosa):
     cont = len(paridadVieja) -1
@@ -233,6 +221,7 @@ def compararParidades(paridadVieja, paridadRuidosa):
        cont-=1
     result = convertDecimal(result)
     return [result, resultCheckList]
+
 
 def buildFinalTable(tableToBuild, extraData, parity):
     tableToBuild[0].append('1')
