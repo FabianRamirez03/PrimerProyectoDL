@@ -216,13 +216,13 @@ def detectError(noisedNumber):
     posicionError = compararParidades(cleaning[1], noisedHammingNumberCalculated[1])
 
     # Construir la tabla final
-    finalTable = buildFinalTable(noisedHamming, noisedHammingNumberCalculated[1])
+    finalTable = buildFinalTable(noisedHamming, noisedHammingNumberCalculated[1])[:5]
 
     # Retornamos la posicion de error con la tabla
     return [posicionError, finalTable]
 
 
-result = detectError('01101011101010111')
+result = detectError('01101011101010101')
 print(result[1])
 
 #pprint(Hamming(cleaning[0], '0'))
