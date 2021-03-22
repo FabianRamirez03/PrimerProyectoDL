@@ -129,7 +129,7 @@ def checkParity(parity, binary, rowNumber, row):
     result = sum % 2
     if parity:
         result = not result
-    row[parityPositions[rowNumber - 1]] = int(result)
+    row[parityPositions[rowNumber - 1]] = str(int(result))
     return row
 
 
@@ -166,7 +166,7 @@ def cleanNumber(binary, parity):
         if cont not in parityPositions:
             new += binary[cont-1]
         else:
-            parityBits.append(binary[cont-1])
+            parityBits.append(str(binary[cont-1]))
         cont+=1
     return [new, parityBits]
 
@@ -175,7 +175,7 @@ def compararParidades(paridadVieja, paridadRuidosa):
     cont = len(paridadVieja) -1
     result = ''
     while cont >= 0:
-       if (str(paridadRuidosa[cont]) != str(paridadVieja[cont])):
+       if (paridadRuidosa[cont] != paridadVieja[cont]):
            result += '1'
        else:
            result += '0'
@@ -191,7 +191,9 @@ def buildFinalTable(tableToBuild, extraData):
             tableToBuild[cont +1].append('Correcto')
         else:
             tableToBuild[cont +1].append('Error')
+        tableToBuild[cont +1].append(extraData[cont])
         cont+=1
+
     return tableToBuild
 
 
@@ -221,7 +223,7 @@ def detectError(noisedNumber):
 
 
 result = detectError('01101011101010111')
-print(result[0])
+print(result[1])
 
 #pprint(Hamming(cleaning[0], '0'))
 
