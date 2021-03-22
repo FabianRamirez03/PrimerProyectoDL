@@ -82,10 +82,6 @@ NZRI_Frame.pack()
 def validate():
     if convertions.validateBinary(numberEntry.get()):
 
-        noiseLabel = Label(number_frame, text="Seleccione la posición del bit \n al que desea insertar ruido: ", fg="Black", bg="White", font=(font, 15))
-        noiseLabel.place(x=20, y=140)
-        noiseCombobox = Combobox(number_frame, font=(font, 14), width=10, values=["0", "1"], state='readonly')
-        noiseCombobox.place(x=270, y=140)
 
         global valorOctal, valorDecimal, valorHexa, HammingTable, inputData
         inputData = numberEntry.get()
@@ -100,11 +96,9 @@ def validate():
             convertionsBox.insert("", "end", values=(valorOctal, valorDecimal, valorHexa))
             displayNZRI(numberEntry.get())
         HammingTable = convertions.Hamming(numberEntry.get(), getParity())
+        HammingTableWithNoise = convertions.HammingWithNoise(HammingTable, noiseCombobox.get())
         showHamming()
         showParity()
-
-
-
     else:
         messagebox.showinfo(message="El número ingresado debe ser binario y de 12 bits", title="Error")
 
@@ -146,6 +140,12 @@ analizarBT = PhotoImage(file="Images/button_analizar.png")
 analizarButton = Button(number_frame, bg='white', image=analizarBT, bd=0, command=validate)
 analizarButton.place(x=265, y=50)
 
+noiseLabel = Label(number_frame, text="Seleccione la posición del bit \n al que desea insertar ruido: ", fg="Black",
+                   bg="White", font=(font, 15))
+noiseLabel.place(x=20, y=140)
+noiseCombobox = Combobox(number_frame, font=(font, 14), width=10,
+                         values=["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"], state='readonly')
+noiseCombobox.place(x=270, y=140)
 # NZRI display
 
 def getParity():
@@ -245,6 +245,12 @@ for col in colsParity:
         listBoxParity.column(col, minwidth=0, width=30, stretch=NO, anchor="center")
 listBoxParity.grid(row=2, column=0, columnspan=2)
 
+
+def getParity():
+    result = False
+    if parityCombobox.get() == "Par":
+        result = True
+    return result
 
 
 def getNoisedNumber():

@@ -45,8 +45,6 @@ def convertNZRI(binaryNum):
         number.append(num)
         xValues.append(cont)
         cont += 1
-    print(yValues)
-    print(xValues)
     return [xValues, yValues, number]
 
 
@@ -154,7 +152,20 @@ def finalResult(wholeResult):
     result[17] = wholeResult[5][17]
     return result
 
-#pprint(Hamming('110110101011', '0'))
+
+def HammingWithNoise(hammingTable, noiseCombobox):
+    list = hammingTable[6][1:]
+
+    print(noiseCombobox)
+    if noiseCombobox == 1:
+        list[0] = not list[0]
+        print("caca" + list)
+    strings = [str(integer) for integer in list]
+    a_string = "".join(strings)
+    an_integer = int(a_string)
+
+    print(an_integer)
+
 
 ### Retorna el valor sin los bits de paridad y los bits de paridad en una lista
 def cleanNumber(binary):
@@ -190,7 +201,6 @@ def compararParidades(paridadVieja, paridadRuidosa):
 def buildFinalTable(tableToBuild, extraData, parity):
     tableToBuild[0].append('1')
     tableToBuild[0].append('')
-    print('hola', extraData)
     cont = 0
     while cont<len(extraData):
         if (extraData[cont] == '0'):
@@ -208,8 +218,7 @@ def detectError(noisedNumber, parity):
     # Recibimos un numero sucio pero con la paridad como si fuera limpio
 
     # Separamos ese numero en los valores de paridad y los valores de data
-    cleaning = cleanNumber(noisedNumber)
-    print('numero viejo: ', cleaning)
+    cleaning = cleanNumber(noisedNumber, '0')
 
     # Recalcular Hamming para el numero 12 bits de data sucia
     noisedHamming = Hamming(cleaning[0], parity)
@@ -218,7 +227,6 @@ def detectError(noisedNumber, parity):
     noisedHammingNumberCalculated = cleanNumber(noisedHamming[-1][1:])
 
     # print(noisedHamming[-1][1:])
-    print('numero nuevo:', noisedHammingNumberCalculated)
 
     # Comparar los valores de paridad viejos con los nuevos
     posicionError = compararParidades(cleaning[1], noisedHammingNumberCalculated[1])
@@ -231,8 +239,7 @@ def detectError(noisedNumber, parity):
     return [posicionError[0], finalTable]
 
 
-result = detectError('01101011101010101', '0')
-print(result[1])
+result = detectError('01101011101010101')
 
 
 
