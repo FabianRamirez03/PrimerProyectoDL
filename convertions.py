@@ -80,7 +80,6 @@ def setRow(binary, rowNumber, row, parity, wholeResult):
                 column = column + 1
                 continue
             else:
-                print(row, ' ', column, ' ', binary, ' ', binaryPos)
                 row[column] = binary[binaryPos]
                 column = column + 1
                 binaryPos = binaryPos + 1
@@ -159,40 +158,40 @@ def HammingWithNoise(hammingTable, noiseCombobox):
 
     print(noiseCombobox)
     if noiseCombobox == '1':
-        list[2] = int(not list[2])
+        list[2] = int(not int(list[2]))
         print("caca" + str(list))
     if noiseCombobox == '2':
-        list[4] = int(not list[4])
+        list[4] = int(not int(list[4]))
         print("caca" + str(list))
     if noiseCombobox == '3':
-        list[5] = int(not list[5])
+        list[5] = int(not int(list[5]))
         print("caca" + str(list))
     if noiseCombobox == '4':
-        list[6] = int(not list[6])
+        list[6] = int(not int(list[6]))
         print("caca" + str(list))
     if noiseCombobox == '5':
-        list[8] = int(not list[8])
+        list[8] = int(not int(list[8]))
         print("caca" + str(list))
     if noiseCombobox == '6':
-        list[9] = int(not list[9])
+        list[9] = int(not int(list[9]))
         print("caca" + str(list))
     if noiseCombobox == '7':
-        list[10] = int(not list[10])
+        list[10] = int(not int(list[10]))
         print("caca" + str(list))
     if noiseCombobox == '8':
-        list[11] = int(not list[11])
+        list[11] = int(not int(list[11]))
         print("caca" + str(list))
     if noiseCombobox == '9':
-        list[12] = int(not list[12])
+        list[12] = int(not int(list[12]))
         print("caca" + str(list))
     if noiseCombobox == '10':
-        list[13] = int(not list[13])
+        list[13] = int(not int(list[13]))
         print("caca" + str(list))
     if noiseCombobox == '11':
-        list[14] = int(not list[14])
+        list[14] = int(not int(list[14]))
         print("caca" + str(list))
     if noiseCombobox == '12':
-        list[16] = int(not list[16])
+        list[16] = int(not int(list[16]))
         print("caca" + str(list))
     strings = [str(integer) for integer in list]
     a_string = "".join(strings)
@@ -264,7 +263,7 @@ def detectError(noisedNumber, parity):
     # print(noisedHamming[-1][1:])
 
     # Comparar los valores de paridad viejos con los nuevos
-    posicionError = compararParidades(cleaning[1], noisedHammingNumberCalculated[1])
+    posicionError = compararParidades(cleaning[1], noisedHammingNumberCalculated[1])    
 
     # Construir la tabla final
     #finalTable = buildFinalTable(noisedHamming, noisedHammingNumberCalculated[1])[:5]
@@ -274,8 +273,8 @@ def detectError(noisedNumber, parity):
     return [posicionError[0], finalTable]
 
 
-# result = detectError('01101011101010101', '0')
-# print(result[1])
+result = detectError('01101011101010101', '0')
+print(result[0])
 
 
 
