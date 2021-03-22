@@ -94,8 +94,8 @@ def validate():
             convertionsBox.insert("", "end", values=(valorOctal, valorDecimal, valorHexa))
             displayNZRI(numberEntry.get())
         HammingTable = convertions.Hamming(numberEntry.get(), getParity())
-        showHamming()
         showParity()
+        showHamming()
     else:
         messagebox.showinfo(message="El número ingresado debe ser binario y de 12 bits", title="Error")
 
@@ -187,7 +187,7 @@ def showHamming():
         listBox.insert("", "end", values=(
             row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10], row[11], row[12],
             row[13], row[14], row[15], row[16], row[17]))
-
+    HammingTable = ''
 
 
 # create Treeview with 3 columns
@@ -203,7 +203,6 @@ for col in colsHamming:
         listBox.heading(col, text=col)
         listBox.column(col, minwidth=0, width=40, stretch=NO, anchor="center")
 listBox.grid(row=0, column=0, columnspan=2)
-showHamming()
 
 
 
@@ -229,6 +228,8 @@ def showParity():
             row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10], row[11], row[12],
             row[13], row[14], row[15], row[16], row[17], row[18], row[19]))
 
+
+    ParityTable = ''
 # create Treeview with 3 columns
 colsParity = ('', 'p1', 'p2', 'd1', 'p3', 'd2', 'd3', 'd4', 'p4', 'd5', 'd6', 'd7', 'd8', 'd9', 'd10', 'd11', 'p5', 'd12',
               "Prueba de paridad", "Bit de Paridad")
