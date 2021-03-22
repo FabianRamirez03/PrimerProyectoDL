@@ -174,23 +174,28 @@ def cleanNumber(binary, parity):
 def compararParidades(paridadVieja, paridadRuidosa):
     cont = len(paridadVieja) -1
     result = ''
+    resultCheckList = []
     while cont >= 0:
        if (paridadRuidosa[cont] != paridadVieja[cont]):
            result += '1'
+           resultCheckList.append('1')
        else:
            result += '0'
+           resultCheckList.append('0')
        cont-=1
     result = convertDecimal(result)
-    return result
+    return [result, resultCheckList]
 
 def buildFinalTable(tableToBuild, extraData):
     tableToBuild[0].append('1')
+    tableToBuild[0].append('')
+    print('hola', extraData)
     cont = 0
     while cont<len(extraData):
         if (extraData[cont] == '0'):
-            tableToBuild[cont +1].append('Error')
-        else:
             tableToBuild[cont +1].append('Correcto')
+        else:
+            tableToBuild[cont +1].append('Error')
         tableToBuild[cont +1].append(extraData[cont])
         cont+=1
 
@@ -209,6 +214,7 @@ def detectError(noisedNumber):
 
     # Obtener los valores de paridad de esa tabla
     noisedHammingNumberCalculated = cleanNumber(noisedHamming[-1][1:], '0')
+
     # print(noisedHamming[-1][1:])
     print('numero nuevo:', noisedHammingNumberCalculated)
 
@@ -216,10 +222,11 @@ def detectError(noisedNumber):
     posicionError = compararParidades(cleaning[1], noisedHammingNumberCalculated[1])
 
     # Construir la tabla final
-    finalTable = buildFinalTable(noisedHamming, noisedHammingNumberCalculated[1])[:5]
+    #finalTable = buildFinalTable(noisedHamming, noisedHammingNumberCalculated[1])[:5]
+    finalTable = buildFinalTable(noisedHamming, posicionError[1])[:5]
 
     # Retornamos la posicion de error con la tabla
-    return [posicionError, finalTable]
+    return [posicionError[0], finalTable]
 
 
 result = detectError('01101011101010101')
