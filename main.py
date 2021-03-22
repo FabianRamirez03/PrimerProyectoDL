@@ -37,6 +37,10 @@ ParityTable = [
     ['P3', '1', '0', '0', '0', '1', '1', '0', '0', '1', '0', '0', '0', '0', '1', '0', '0', 'Correcto', '1'],
     ['P4', '1', '0', '0', '0', '1', '1', '0', '0', '1', '0', '0', '0', '0', '1', '0', '0', 'Error', '1']]
 
+ParityTable = convertions.detectError('01101011101010111')[1]
+
+
+
 # root.geometry("1400x650")
 root.geometry('%dx%d+%d+%d' % (1400, 700, 20, 20))
 root.resizable(height=False, width=False)
@@ -87,6 +91,7 @@ def validate():
             displayNZRI(numberEntry.get())
         HammingTable = convertions.Hamming(numberEntry.get(), getParity())
         showHamming()
+
 
 
     else:
@@ -191,15 +196,14 @@ showHamming()
 def showParity():
     global ParityTable, listBoxParity
     tempList = ParityTable
-
     for row in tempList:
         listBoxParity.insert("", "end", values=(
             row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10], row[11], row[12],
-            row[13], row[14], row[15], row[16], row[17], row[18]))
-
+            row[13], row[14], row[15], row[16], row[17], row[18], row[19]))
+    print('perdido', ParityTable)
 
 # create Treeview with 3 columns
-colsParity = ('', 'p1', 'p2', 'd1', 'p3', 'd2', 'd3', 'd4', 'p4', 'd5', 'd6', 'd7', 'd8', 'd9', 'd10', 'd11', 'd12',
+colsParity = ('', 'p1', 'p2', 'd1', 'p3', 'd2', 'd3', 'd4', 'p4', 'd5', 'd6', 'd7', 'd8', 'd9', 'd10', 'd11', 'p5', 'd12',
               "Prueba de paridad", "Bit de Paridad")
 listBoxParity = Treeview(Parity_Frame, columns=colsParity, show='headings')
 # set column headings
