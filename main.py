@@ -4,7 +4,8 @@ from tkinter import messagebox, ttk
 from tkinter.ttk import Combobox, Treeview
 from tkinter import messagebox
 import matplotlib.pyplot as plt
-import tk as tk
+import tkinter as tk
+
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 import convertions
@@ -19,6 +20,8 @@ valorOctal = ""
 valorDecimal = ""
 valorHexa = ""
 
+inputData = ""
+
 HammingTable = [
     ['Palabras de datos (sin paridad)', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
     ['P1', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
@@ -30,15 +33,19 @@ HammingTable = [
 ]
 
 ParityTable = [
-    ['Palabra de datos recibida', '1', '0', '0', '0', '1', '1', '0', '0', '1', '0', '0', '1', '0', '0', '1', '0', '0',
+    ['Palabra de datos recibida', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
      ''],
-    ['P1', '1', '0', '0', '0', '1', '1', '0', '0', '1', '0', '0', '0', '0', '1', '0', '0', 'Error', '1'],
-    ['P2', '1', '0', '0', '0', '1', '1', '0', '0', '1', '0', '0', '0', '0', '1', '0', '0', 'Error', '1'],
-    ['P3', '1', '0', '0', '0', '1', '1', '0', '0', '1', '0', '0', '0', '0', '1', '0', '0', 'Correcto', '1'],
-    ['P4', '1', '0', '0', '0', '1', '1', '0', '0', '1', '0', '0', '0', '0', '1', '0', '0', 'Error', '1']]
+    ['P1', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Error', ''],
+    ['P2', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Error', ''],
+    ['P3', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Correcto', ''],
+    ['P4', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Error', '']]
+
+ParityTable = convertions.detectError('01101011101010111')[1]
+
+
 
 # root.geometry("1400x650")
-root.geometry('%dx%d+%d+%d' % (1400, 700, 20, 20))
+root.geometry('%dx%d+%d+%d' % (1400, 800, 20, 20))
 root.resizable(height=False, width=False)
 
 # Frame donde estan las tablas
@@ -56,7 +63,7 @@ left_Frame = Frame(root, width=400, bg="white", borderwidth=2)
 left_Frame.pack(fill="both", side="left")
 
 # Frame que contiene el canvas donde la tortuga dibuja
-number_frame = Frame(left_Frame, width=400, height=160, bg="white", bd=2)
+number_frame = Frame(left_Frame, width=400, height=200, bg="white", bd=2)
 number_frame.pack()
 number_frame.pack(side='top', padx=0, pady=0, anchor='w')
 
@@ -74,7 +81,14 @@ NZRI_Frame.pack()
 
 def validate():
     if convertions.validateBinary(numberEntry.get()):
-        global valorOctal, valorDecimal, valorHexa, HammingTable
+
+        noiseLabel = Label(number_frame, text="Seleccione la posición del bit \n al que desea insertar ruido: ", fg="Black", bg="White", font=(font, 15))
+        noiseLabel.place(x=20, y=140)
+        noiseCombobox = Combobox(number_frame, font=(font, 14), width=10, values=["0", "1"], state='readonly')
+        noiseCombobox.place(x=270, y=140)
+
+        global valorOctal, valorDecimal, valorHexa, HammingTable, inputData
+        inputData = numberEntry.get()
         valorOctal = convertions.convertOctal(numberEntry.get())
         valorDecimal = convertions.convertDecimal(numberEntry.get())
         valorHexa = convertions.convertHexadecimal(numberEntry.get())
@@ -87,6 +101,8 @@ def validate():
             displayNZRI(numberEntry.get())
         HammingTable = convertions.Hamming(numberEntry.get(), getParity())
         showHamming()
+        showParity()
+
 
 
     else:
@@ -128,7 +144,7 @@ parityCombobox.current(0)
 
 analizarBT = PhotoImage(file="Images/button_analizar.png")
 analizarButton = Button(number_frame, bg='white', image=analizarBT, bd=0, command=validate)
-analizarButton.place(x=240, y=50)
+analizarButton.place(x=265, y=50)
 
 # NZRI display
 
@@ -190,16 +206,14 @@ showHamming()
 
 def showParity():
     global ParityTable, listBoxParity
-    tempList = ParityTable
-
+    tempList = convertions.detectError('01101011101010111')[1]
     for row in tempList:
         listBoxParity.insert("", "end", values=(
             row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10], row[11], row[12],
-            row[13], row[14], row[15], row[16], row[17], row[18]))
-
+            row[13], row[14], row[15], row[16], row[17], row[18], row[19]))
 
 # create Treeview with 3 columns
-colsParity = ('', 'p1', 'p2', 'd1', 'p3', 'd2', 'd3', 'd4', 'p4', 'd5', 'd6', 'd7', 'd8', 'd9', 'd10', 'd11', 'd12',
+colsParity = ('', 'p1', 'p2', 'd1', 'p3', 'd2', 'd3', 'd4', 'p4', 'd5', 'd6', 'd7', 'd8', 'd9', 'd10', 'd11', 'p5', 'd12',
               "Prueba de paridad", "Bit de Paridad")
 listBoxParity = Treeview(Parity_Frame, columns=colsParity, show='headings')
 # set column headings
@@ -214,14 +228,16 @@ for col in colsParity:
         listBoxParity.heading(col, text=col)
         listBoxParity.column(col, minwidth=0, width=30, stretch=NO, anchor="center")
 listBoxParity.grid(row=2, column=0, columnspan=2)
-showParity()
-
 
 def getParity():
     result = False
     if parityCombobox.get() == "Par":
         result = True
     return result
+
+
+def getNoisedNumber():
+    return 1
 
 
 # Safe closure
