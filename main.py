@@ -43,17 +43,17 @@ ParityTable = [
 
 
 # root.geometry("1400x650")
-root.geometry('%dx%d+%d+%d' % (1400, 800, 20, 20))
+root.geometry('%dx%d+%d+%d' % (1400, 880, 20, 20))
 root.resizable(height=False, width=False)
 
 # Frame donde estan las tablas
 tables_Frame = Frame(root, width=500, bg="white", bd=2)
 tables_Frame.pack(fill=Y, side="right")
 
-Hamming_Frame = Frame(tables_Frame, height=200, width=700, bg="white", bd=2)
+Hamming_Frame = Frame(tables_Frame, height=200, width=900, bg="white", bd=2)
 Hamming_Frame.pack()
 
-Parity_Frame = Frame(tables_Frame, height=200, width=700, bg="white", bd=2)
+Parity_Frame = Frame(tables_Frame, height=200, width=900, bg="white", bd=2)
 Parity_Frame.pack()
 
 # Frame que el contenido del lado izquierdo
@@ -61,7 +61,7 @@ left_Frame = Frame(root, width=400, bg="white", borderwidth=2)
 left_Frame.pack(fill="both", side="left")
 
 # Frame que contiene el canvas donde la tortuga dibuja
-number_frame = Frame(left_Frame, width=400, height=200, bg="white", bd=2)
+number_frame = Frame(left_Frame, width=400, height=280, bg="white", bd=2)
 number_frame.pack()
 number_frame.pack(side='top', padx=0, pady=0, anchor='w')
 
@@ -70,7 +70,7 @@ equivalencias_Frame = Frame(left_Frame, width=400, height=500, bg="white", bd=2)
 equivalencias_Frame.pack()
 
 # Frame que contiene la señal NZRI
-NZRI_Frame = Frame(left_Frame, width=400, height=500, bg="white", bd=2)
+NZRI_Frame = Frame(left_Frame, width=1400, height=500, bg="white", bd=2)
 NZRI_Frame.pack()
 
 
@@ -120,29 +120,32 @@ def displayNZRI(number):
 
 
 numberLabel = Label(number_frame, text="Número a analizar", fg="Black", bg="White", font=(font, 15))
-numberLabel.place(x=20, y=10)
+numberLabel.place(x=140, y=10)
 
 numberEntry = Entry(number_frame, font=(font, 15), borderwidth=3, relief="sunken")
-numberEntry.place(x=20, y=50)
+numberEntry.place(x=110, y=50)
 
 parityLabel = Label(number_frame, text="Paridad:", fg="Black", bg="White", font=(font, 15))
-parityLabel.place(x=20, y=90)
+parityLabel.place(x=150, y=90)
 
 parityCombobox = Combobox(number_frame, font=(font, 14), width=10, values=["Par", "Impar"], state='readonly')
-parityCombobox.place(x=100, y=90)
+parityCombobox.place(x=150, y=90)
 root.option_add('*TCombobox*Listbox.font', (font, 14))
 parityCombobox.current(0)
 
 analizarBT = PhotoImage(file="Images/button_analizar.png")
 analizarButton = Button(number_frame, bg='white', image=analizarBT, bd=0, command=validate)
-analizarButton.place(x=265, y=50)
+analizarButton.place(x=150, y=200)
 
 noiseLabel = Label(number_frame, text="Seleccione la posición del bit \n al que desea insertar ruido: ", fg="Black",
                    bg="White", font=(font, 15))
 noiseLabel.place(x=20, y=140)
 noiseCombobox = Combobox(number_frame, font=(font, 14), width=10,
                          values=["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"], state='readonly')
-noiseCombobox.place(x=270, y=140)
+noiseCombobox.place(x=270, y=150)
+
+
+
 # NZRI display
 
 def getParity():
@@ -171,6 +174,14 @@ HammingLabel.grid(row=0, column=0, columnspan=2)
 ComprobacionLabel = Label(Parity_Frame, text="Comprobación de los bits de paridad en el código Hamming", fg="Black",
                           bg="White", font=(font, 14))
 ComprobacionLabel.grid(row=0, column=0, columnspan=2)
+
+errorPositionLabel = Label(tables_Frame, text="Posición del error: ", fg="Black",
+                           bg="White", font=(font, 25))
+errorPositionLabel.place(x=40, y=540)
+errorPositionLabelValue = Label(tables_Frame, text="", fg="Black",
+                                bg="White", font=(font, 25))
+errorPositionLabelValue.place(x=300, y=540)
+
 
 # Tabla de Hamming
 style = ttk.Style()
@@ -222,12 +233,15 @@ def showParity():
     tempList = ParityTable
 
     for i in listBoxParity.get_children():
-        listBox.delete(i)
+        listBoxParity.delete(i)
 
     for row in tempList:
         listBoxParity.insert("", "end", values=(
             row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10], row[11], row[12],
             row[13], row[14], row[15], row[16], row[17], row[18], row[19]))
+
+    errorPosition = convertions.detectError(HammingNumberWithNoise, getParity())[0]
+    errorPositionLabelValue['text'] = errorPosition
 
 # create Treeview with 3 columns
 colsParity = ('', 'p1', 'p2', 'd1', 'p3', 'd2', 'd3', 'd4', 'p4', 'd5', 'd6', 'd7', 'd8', 'd9', 'd10', 'd11', 'p5', 'd12',
@@ -247,10 +261,11 @@ for col in colsParity:
 listBoxParity.grid(row=2, column=0, columnspan=2)
 
 
+
 def getParity():
-    result = True
+    result = False
     if parityCombobox.get() == "Par":
-        result = False
+        result = True
     return result
 
 
