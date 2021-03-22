@@ -150,9 +150,9 @@ noiseCombobox.place(x=270, y=150)
 # NZRI display
 
 def getParity():
-    result = False
+    result = '0'
     if parityCombobox.get() == "Par":
-        result = True
+        result = '1'
     return result
 
 
@@ -229,8 +229,9 @@ def showParity():
     global ParityTable, listBoxParity
 
     HammingNumberWithNoise = convertions.HammingWithNoise(HammingTable, noiseCombobox.get())
-
+    print('crgsa',HammingNumberWithNoise)
     ParityTable = convertions.detectError(HammingNumberWithNoise, getParity())[1]
+
     tempList = ParityTable
     for i in listBoxParity.get_children():
         listBoxParity.delete(i)
@@ -264,9 +265,9 @@ listBoxParity.grid(row=2, column=0, columnspan=2)
 
 
 def getParity():
-    result = '1'
+    result = '0'
     if parityCombobox.get() == "Par":
-        result = '0'
+        result = '1'
     return result
 
 

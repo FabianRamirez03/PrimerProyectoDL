@@ -219,6 +219,8 @@ def cleanNumber(binary):
 ### Retorna la posicion donde se encuentra el error
 def compararParidades(paridadVieja, paridadRuidosa):
     cont = len(paridadVieja) -1
+    print(paridadVieja)
+    print(paridadRuidosa)
     result = ''
     resultCheckList = []
     while cont >= 0:
@@ -255,6 +257,7 @@ def detectError(noisedNumber, parity):
     cleaning = cleanNumber(noisedNumber)
 
     # Recalcular Hamming para el numero 12 bits de data sucia
+    print('cdssfd', cleaning[0])
     noisedHamming = Hamming(cleaning[0], parity)
 
     # Obtener los valores de paridad de esa tabla
@@ -263,20 +266,20 @@ def detectError(noisedNumber, parity):
     # print(noisedHamming[-1][1:])
 
     # Comparar los valores de paridad viejos con los nuevos
-    posicionError = compararParidades(cleaning[1], noisedHammingNumberCalculated[1])    
+    posicionError = compararParidades(cleaning[1], noisedHammingNumberCalculated[1])
 
     # Construir la tabla final
     #finalTable = buildFinalTable(noisedHamming, noisedHammingNumberCalculated[1])[:5]
-    finalTable = buildFinalTable(noisedHamming, posicionError[1], noisedHammingNumberCalculated[1])[:6]
+    finalTable = buildFinalTable(noisedHamming, posicionError[1], cleaning[1])[:6]
 
     # Retornamos la posicion de error con la tabla
     return [posicionError[0], finalTable]
 
 
-result = detectError('01101011101010101', '0')
-print(result[0])
+#result = detectError('001111010110', '0')
+#print(result[0])
 
-
+print(Hamming('001111010110', '0'))
 
 
 #pprint(Hamming(cleaning[0], '0'))
