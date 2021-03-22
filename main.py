@@ -40,8 +40,8 @@ ParityTable = [
     ['P3', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Correcto', ''],
     ['P4', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Error', '']]
 
-ParityTable = convertions.detectError('01101011101010111')[1]
 
+ParityTable = convertions.detectError('01101011101010101', '0')[1]
 
 
 # root.geometry("1400x650")
@@ -148,6 +148,13 @@ analizarButton.place(x=265, y=50)
 
 # NZRI display
 
+def getParity():
+    result = False
+    if parityCombobox.get() == "Par":
+        result = True
+    return result
+
+
 
 # Table for convertions
 label = Label(equivalencias_Frame, text="Equivalencias", font=("Arial", 15)).grid(row=0, columnspan=2)
@@ -202,11 +209,20 @@ listBox.grid(row=0, column=0, columnspan=2)
 showHamming()
 
 
+
+
+
 # Comprobación de los bits de paridad
+
+
 
 def showParity():
     global ParityTable, listBoxParity
-    tempList = convertions.detectError('01101011101010111')[1]
+    tempList = ParityTable
+
+    for i in listBoxParity.get_children():
+        listBox.delete(i)
+
     for row in tempList:
         listBoxParity.insert("", "end", values=(
             row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10], row[11], row[12],
@@ -229,11 +245,6 @@ for col in colsParity:
         listBoxParity.column(col, minwidth=0, width=30, stretch=NO, anchor="center")
 listBoxParity.grid(row=2, column=0, columnspan=2)
 
-def getParity():
-    result = False
-    if parityCombobox.get() == "Par":
-        result = True
-    return result
 
 
 def getNoisedNumber():

@@ -157,7 +157,7 @@ def finalResult(wholeResult):
 #pprint(Hamming('110110101011', '0'))
 
 ### Retorna el valor sin los bits de paridad y los bits de paridad en una lista
-def cleanNumber(binary, parity):
+def cleanNumber(binary):
     parityPositions = [1, 2, 4, 8, 16]
     cont = 1
     new = ''
@@ -184,9 +184,10 @@ def compararParidades(paridadVieja, paridadRuidosa):
            resultCheckList.append('0')
        cont-=1
     result = convertDecimal(result)
+    print('me cago', result)
     return [result, resultCheckList]
 
-def buildFinalTable(tableToBuild, extraData):
+def buildFinalTable(tableToBuild, extraData, parity):
     tableToBuild[0].append('1')
     tableToBuild[0].append('')
     print('hola', extraData)
@@ -196,24 +197,25 @@ def buildFinalTable(tableToBuild, extraData):
             tableToBuild[cont +1].append('Correcto')
         else:
             tableToBuild[cont +1].append('Error')
-        tableToBuild[cont +1].append(extraData[cont])
+        tableToBuild[cont +1].append(parity[cont])
         cont+=1
 
     return tableToBuild
 
 
-def detectError(noisedNumber):
+
+def detectError(noisedNumber, parity):
     # Recibimos un numero sucio pero con la paridad como si fuera limpio
 
     # Separamos ese numero en los valores de paridad y los valores de data
-    cleaning = cleanNumber(noisedNumber, '0')
+    cleaning = cleanNumber(noisedNumber)
     print('numero viejo: ', cleaning)
 
     # Recalcular Hamming para el numero 12 bits de data sucia
-    noisedHamming = Hamming(cleaning[0], '0')
+    noisedHamming = Hamming(cleaning[0], parity)
 
     # Obtener los valores de paridad de esa tabla
-    noisedHammingNumberCalculated = cleanNumber(noisedHamming[-1][1:], '0')
+    noisedHammingNumberCalculated = cleanNumber(noisedHamming[-1][1:])
 
     # print(noisedHamming[-1][1:])
     print('numero nuevo:', noisedHammingNumberCalculated)
@@ -223,14 +225,18 @@ def detectError(noisedNumber):
 
     # Construir la tabla final
     #finalTable = buildFinalTable(noisedHamming, noisedHammingNumberCalculated[1])[:5]
-    finalTable = buildFinalTable(noisedHamming, posicionError[1])[:5]
+    finalTable = buildFinalTable(noisedHamming, posicionError[1], noisedHammingNumberCalculated[1])[:6]
 
     # Retornamos la posicion de error con la tabla
     return [posicionError[0], finalTable]
 
 
-result = detectError('01101011101010101')
+result = detectError('01101011101010101', '0')
 print(result[1])
+
+
+
+
 
 #pprint(Hamming(cleaning[0], '0'))
 
