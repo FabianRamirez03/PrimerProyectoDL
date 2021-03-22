@@ -1,3 +1,6 @@
+from pprint import pprint
+
+
 def validateBinary(numberEntry):
     binary = False
     for i in str(numberEntry):
@@ -150,3 +153,77 @@ def finalResult(wholeResult):
     result[16] = wholeResult[5][16]
     result[17] = wholeResult[5][17]
     return result
+
+#pprint(Hamming('110110101011', '0'))
+
+### Retorna el valor sin los bits de paridad y los bits de paridad en una lista
+def cleanNumber(binary, parity):
+    parityPositions = [1, 2, 4, 8, 16]
+    cont = 1
+    new = ''
+    parityBits = []
+    while cont <= len(binary):
+        if cont not in parityPositions:
+            new += binary[cont-1]
+        else:
+            parityBits.append(binary[cont-1])
+        cont+=1
+    return [new, parityBits]
+
+### Retorna la posicion donde se encuentra el error
+def compararParidades(paridadVieja, paridadRuidosa):
+    cont = len(paridadVieja) -1
+    result = ''
+    while cont >= 0:
+       if (str(paridadRuidosa[cont]) != str(paridadVieja[cont])):
+           result += '1'
+       else:
+           result += '0'
+       cont-=1
+    result = convertDecimal(result)
+    return result
+
+def buildFinalTable(tableToBuild, extraData):
+    tableToBuild[0].append('1')
+    cont = 0
+    while cont<len(extraData):
+        if (extraData[cont] == 0):
+            tableToBuild[cont +1].append('Correcto')
+        else:
+            tableToBuild[cont +1].append('Error')
+        cont+=1
+    return tableToBuild
+
+
+def detectError(noisedNumber):
+    # Recibimos un numero sucio pero con la paridad como si fuera limpio
+
+    # Separamos ese numero en los valores de paridad y los valores de data
+    cleaning = cleanNumber(noisedNumber, '0')
+    print('numero viejo: ', cleaning)
+
+    # Recalcular Hamming para el numero 12 bits de data sucia
+    noisedHamming = Hamming(cleaning[0], '0')
+
+    # Obtener los valores de paridad de esa tabla
+    noisedHammingNumberCalculated = cleanNumber(noisedHamming[-1][1:], '0')
+    # print(noisedHamming[-1][1:])
+    print('numero nuevo:', noisedHammingNumberCalculated)
+
+    # Comparar los valores de paridad viejos con los nuevos
+    posicionError = compararParidades(cleaning[1], noisedHammingNumberCalculated[1])
+
+    # Construir la tabla final
+    finalTable = buildFinalTable(noisedHamming, noisedHammingNumberCalculated[1])
+
+    # Retornamos la posicion de error con la tabla
+    return [posicionError, finalTable]
+
+
+result = detectError('01101011101010111')
+print(result[0])
+
+#pprint(Hamming(cleaning[0], '0'))
+
+
+#Result should be 110110101011
