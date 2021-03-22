@@ -157,14 +157,49 @@ def HammingWithNoise(hammingTable, noiseCombobox):
     list = hammingTable[6][1:]
 
     print(noiseCombobox)
-    if noiseCombobox == 1:
-        list[0] = not list[0]
-        print("caca" + list)
+    if noiseCombobox == '1':
+        list[2] = int(not list[2])
+        print("caca" + str(list))
+    if noiseCombobox == '2':
+        list[4] = int(not list[4])
+        print("caca" + str(list))
+    if noiseCombobox == '3':
+        list[5] = int(not list[5])
+        print("caca" + str(list))
+    if noiseCombobox == '4':
+        list[6] = int(not list[6])
+        print("caca" + str(list))
+    if noiseCombobox == '5':
+        list[8] = int(not list[8])
+        print("caca" + str(list))
+    if noiseCombobox == '6':
+        list[9] = int(not list[9])
+        print("caca" + str(list))
+    if noiseCombobox == '7':
+        list[10] = int(not list[10])
+        print("caca" + str(list))
+    if noiseCombobox == '8':
+        list[11] = int(not list[11])
+        print("caca" + str(list))
+    if noiseCombobox == '9':
+        list[12] = int(not list[12])
+        print("caca" + str(list))
+    if noiseCombobox == '10':
+        list[13] = int(not list[13])
+        print("caca" + str(list))
+    if noiseCombobox == '11':
+        list[14] = int(not list[14])
+        print("caca" + str(list))
+    if noiseCombobox == '12':
+        list[16] = int(not list[16])
+        print("caca" + str(list))
     strings = [str(integer) for integer in list]
     a_string = "".join(strings)
-    an_integer = int(a_string)
+    result = int(a_string)
 
-    print(an_integer)
+    print(result)
+
+    return str(result)
 
 
 ### Retorna el valor sin los bits de paridad y los bits de paridad en una lista
@@ -195,7 +230,6 @@ def compararParidades(paridadVieja, paridadRuidosa):
            resultCheckList.append('0')
        cont-=1
     result = convertDecimal(result)
-    print('me cago', result)
     return [result, resultCheckList]
 
 def buildFinalTable(tableToBuild, extraData, parity):
@@ -218,7 +252,7 @@ def detectError(noisedNumber, parity):
     # Recibimos un numero sucio pero con la paridad como si fuera limpio
 
     # Separamos ese numero en los valores de paridad y los valores de data
-    cleaning = cleanNumber(noisedNumber, '0')
+    cleaning = cleanNumber(noisedNumber)
 
     # Recalcular Hamming para el numero 12 bits de data sucia
     noisedHamming = Hamming(cleaning[0], parity)
@@ -239,7 +273,7 @@ def detectError(noisedNumber, parity):
     return [posicionError[0], finalTable]
 
 
-result = detectError('01101011101010101')
+# result = detectError('01101011101010101')
 
 
 

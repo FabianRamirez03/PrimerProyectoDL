@@ -41,8 +41,6 @@ ParityTable = [
     ['P4', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Error', '']]
 
 
-ParityTable = convertions.detectError('01101011101010101', '0')[1]
-
 
 # root.geometry("1400x650")
 root.geometry('%dx%d+%d+%d' % (1400, 800, 20, 20))
@@ -96,7 +94,6 @@ def validate():
             convertionsBox.insert("", "end", values=(valorOctal, valorDecimal, valorHexa))
             displayNZRI(numberEntry.get())
         HammingTable = convertions.Hamming(numberEntry.get(), getParity())
-        HammingTableWithNoise = convertions.HammingWithNoise(HammingTable, noiseCombobox.get())
         showHamming()
         showParity()
     else:
@@ -218,6 +215,10 @@ showHamming()
 
 def showParity():
     global ParityTable, listBoxParity
+
+    HammingNumberWithNoise = convertions.HammingWithNoise(HammingTable, noiseCombobox.get())
+
+    ParityTable = convertions.detectError(HammingNumberWithNoise, getParity())[1]
     tempList = ParityTable
 
     for i in listBoxParity.get_children():
@@ -247,14 +248,10 @@ listBoxParity.grid(row=2, column=0, columnspan=2)
 
 
 def getParity():
-    result = False
+    result = True
     if parityCombobox.get() == "Par":
-        result = True
+        result = False
     return result
-
-
-def getNoisedNumber():
-    return 1
 
 
 # Safe closure
